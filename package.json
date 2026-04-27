@@ -1,6 +1,6 @@
 {
   "name": "@dhan-oss/dhanhq-skill",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "DhanHQ agent skill for Claude Code, Codex, and Agent Skills-compatible AI agents — live NSE/BSE/MCX trading via Dhan API",
   "keywords": [
     "dhan",
