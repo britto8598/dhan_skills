@@ -1,0 +1,9 @@
+{
+  "client_id": "",
+  "access_token": "",
+  "default_exchange": "NSE_EQ",
+  "default_product_type": "CNC",
+  "risk_warnings": true,
+  "max_order_value": 50000,
+  "frequently_traded": ["RELIANCE", "TCS", "INFY", "HDFCBANK", "SBIN"]
+}
