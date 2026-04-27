@@ -10,23 +10,23 @@ Built for the [Agent Skills open standard](https://agentskills.io) and compatibl
 
 ## Installation
 
-### Claude Code (recommended)
-
-```bash
-npx skills add dhan-oss/dhanhq-skills --skill dhanhq
-```
-
-Pin to a specific release:
-
-```bash
-npx skills add dhan-oss/dhanhq-skills --ref v1.0.0 --skill dhanhq
-```
-
 ### Global install
 
 ```bash
 npm install -g skills
 skills add dhan-oss/dhanhq-skills --skill dhanhq
+```
+
+### Claude Code or Codex
+
+```bash
+npx skills add dhan-oss/dhanhq-skills --skill dhanhq
+```
+
+OR 
+
+```bash
+npx @dhan-oss/dhanhq-skill
 ```
 
 ---

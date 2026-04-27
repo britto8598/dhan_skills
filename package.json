@@ -1,0 +1,42 @@
+{
+  "name": "@dhan-oss/dhanhq-skill",
+  "version": "1.0.0",
+  "description": "DhanHQ agent skill for Claude Code, Codex, and Agent Skills-compatible AI agents — live NSE/BSE/MCX trading via Dhan API",
+  "keywords": [
+    "dhan",
+    "dhanhq",
+    "agent-skills",
+    "trading",
+    "nse",
+    "bse",
+    "mcx",
+    "claude-code",
+    "codex",
+    "skill"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dhan-oss/dhanhq-skills.git"
+  },
+  "homepage": "https://github.com/dhan-oss/dhanhq-skills#readme",
+  "bugs": {
+    "url": "https://github.com/dhan-oss/dhanhq-skills/issues"
+  },
+  "bin": {
+    "dhanhq-skill": "./bin/install.js"
+  },
+  "files": [
+    "bin/",
+    "skills/",
+    "config.json.example",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=16"
+  },
+  "scripts": {
+    "test": "node bin/install.js --help"
+  }
+}
