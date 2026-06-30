@@ -1,5 +1,7 @@
 # DhanHQ Agent Skills
 
+Use DhanHQ APIs inside AI agents like Claude Code, Codex or any other agent of your choice.
+
 **Dhan-native agent skill for NSE/BSE equities, F&O, and commodity trading.**
 
 Give your AI agent the ability to place live orders, read real portfolio data, stream market feeds, and access the full instrument universe of Indian exchanges — all through [DhanHQ's APIs](https://api.dhan.co/v2/#/).
@@ -9,6 +11,8 @@ Built for the [Agent Skills open standard](https://agentskills.io) and compatibl
 ---
 
 ## Installation
+
+****You don’t need to clone the repository. Install the skill directly with `npx`.**
 
 ### Global install
 
@@ -30,6 +34,16 @@ npx @dhan-oss/dhanhq-skill
 ```
 
 ---
+## After Installation
+
+Once installed, your AI agent can automatically use the `dhanhq` skill when your prompt involves DhanHQ APIs, Indian market data, portfolio, orders, funds, or trading workflows.
+
+Example prompts:
+
+- Show my holdings
+- Get daily OHLC for RELIANCE for the last 6 months
+- Show Nifty option chain for nearest expiry
+- Check margin required to sell 1 lot of Nifty
 
 ## Requirements
 
