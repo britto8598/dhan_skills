@@ -12,7 +12,7 @@ Built for the [Agent Skills open standard](https://agentskills.io) and compatibl
 
 ## Installation
 
-****You don’t need to clone the repository. Install the skill directly with `npx`.**
+**You don’t need to clone the repository. Install the skill directly with `npx`.**
 
 ### Global install
 
