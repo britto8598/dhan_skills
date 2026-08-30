@@ -22,7 +22,7 @@ atm = find_atm_row(chain_df, spot)
 
 ce_security_id = atm["ce_security_id"]
 ce_ltp = float(atm["ce_ltp"])
-lot_size = get_lot_size(underlying="NIFTY") or 75
+lot_size = get_lot_size(underlying="NIFTY") or 65  # fallback; master is authoritative
 quantity = lot_size
 
 print(f"Nifty spot: {spot}")
