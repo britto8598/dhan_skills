@@ -64,11 +64,23 @@ Validation rules to enforce before placement:
 Use `should_slice=True` or the explicit SDK helper:
 
 ```python
+from scripts.dhan_helpers import get_lot_size
+
+# Derivative security IDs are per-contract and stop resolving after expiry.
+# Resolve a live contract from the option chain or resolve_derivative()
+# rather than reusing a literal ID.
+security_id = "49081"
+
+# Quantity must be a lot-size multiple. Slicing is only needed when it also
+# exceeds the current exchange freeze quantity.
+lot_size = get_lot_size(security_id=security_id)
+quantity = 80 * lot_size
+
 response = dhan.place_slice_order(
-    security_id="49081",
+    security_id=security_id,
     exchange_segment=dhanhq.NSE_FNO,
     transaction_type=dhanhq.BUY,
-    quantity=2500,
+    quantity=quantity,
     order_type=dhanhq.LIMIT,
     product_type=dhanhq.INTRA,
     price=150.0,
@@ -79,6 +91,10 @@ response = dhan.place_slice_order(
 Use this only after checking current freeze-quantity requirements.
 
 ### Modify Order
+
+Order modifications are capped at 25 modifications per order. Past that the
+exchange rejects further amendments, so a strategy that re-prices an order on
+every tick must cancel and replace instead of modifying indefinitely.
 
 Current SDK signature:
 

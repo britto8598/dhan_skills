@@ -108,6 +108,8 @@ if response["status"] == "success":
 Current API truth:
 - Intraday data is ranged minute data, not "today only".
 - The v2 historical-data page documents last 5 years for active instruments.
+- Only 90 days can be polled in a single call, for any interval. Longer windows
+  must be fetched in chunks and concatenated.
 - The installed SDK docstring still says "last 5 trading day". Prefer the current v2 API docs when planning data windows.
 
 Supported intervals:
