@@ -78,7 +78,8 @@ chain_df, spot = fetch_chain_df(dhan, 13, "2025-03-27")
 atm = find_atm_row(chain_df, spot)
 
 # Step 2: resolve the lot size rather than hardcoding it -- it changes.
-quantity = get_lot_size(underlying="NIFTY")
+# Resolve by security_id: it is exact, and works for any underlying.
+quantity = get_lot_size(security_id=atm["ce_security_id"])
 
 margin = check_margin(
     dhan,

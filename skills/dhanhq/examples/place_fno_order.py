@@ -22,7 +22,12 @@ atm = find_atm_row(chain_df, spot)
 
 ce_security_id = atm["ce_security_id"]
 ce_ltp = float(atm["ce_ltp"])
-lot_size = get_lot_size(underlying="NIFTY") or 65  # fallback; master is authoritative
+lot_size = get_lot_size(security_id=ce_security_id)
+if lot_size is None:
+    raise SystemExit(
+        "Could not resolve lot size from the security master. "
+        "Refusing to guess -- confirm the lot size before ordering."
+    )
 quantity = lot_size
 
 print(f"Nifty spot: {spot}")

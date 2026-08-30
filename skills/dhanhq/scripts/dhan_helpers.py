@@ -129,6 +129,21 @@ def resolve_symbol(
     }
 
 
+def _underlying_mask(df, underlying: str):
+    """Boolean mask of rows whose contract belongs to ``underlying``.
+
+    Dhan trading symbols are ``UNDERLYING-MonYYYY-STRIKE-CE``, so the underlying
+    is the prefix before the first hyphen.
+
+    SEM_CUSTOM_SYMBOL cannot be used for this. For derivatives it holds the full
+    contract description ("NIFTY 23 NOV 19000 CALL"), never the bare underlying,
+    so an equality test against it matches zero rows for every underlying.
+    """
+
+    prefix = underlying.upper().strip() + "-"
+    return df["SEM_TRADING_SYMBOL"].astype(str).str.upper().str.startswith(prefix)
+
+
 def resolve_derivative(
     underlying: str,
     *,
@@ -144,7 +159,7 @@ def resolve_derivative(
     mask = (
         (df["SEM_EXM_EXCH_ID"].astype(str).str.upper() == exchange.upper())
         & (df["SEM_INSTRUMENT_NAME"].isin(instrument_names))
-        & (df["SEM_CUSTOM_SYMBOL"].astype(str).str.upper() == underlying.upper())
+        & _underlying_mask(df, underlying)
     )
 
     if strike is not None:
@@ -191,7 +206,7 @@ def get_lot_size(
 
     if underlying is not None:
         match = df[
-            (df["SEM_CUSTOM_SYMBOL"].astype(str).str.upper() == underlying.upper())
+            _underlying_mask(df, underlying)
             & (df["SEM_INSTRUMENT_NAME"].isin(["OPTIDX", "OPTSTK", "FUTIDX", "FUTSTK"]))
         ]
         if not match.empty:
