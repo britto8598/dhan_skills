@@ -67,17 +67,26 @@ Recommended sequence:
 Skeleton:
 
 ```python
-from scripts.dhan_helpers import fetch_chain_df, find_atm_row, check_margin
+from scripts.dhan_helpers import (
+    fetch_chain_df,
+    find_atm_row,
+    check_margin,
+    get_lot_size,
+)
 
 chain_df, spot = fetch_chain_df(dhan, 13, "2025-03-27")
 atm = find_atm_row(chain_df, spot)
+
+# Step 2: resolve the lot size rather than hardcoding it -- it changes.
+# Resolve by security_id: it is exact, and works for any underlying.
+quantity = get_lot_size(security_id=atm["ce_security_id"])
 
 margin = check_margin(
     dhan,
     security_id=atm["ce_security_id"],
     exchange_segment=dhanhq.NSE_FNO,
     transaction_type=dhanhq.BUY,
-    quantity=75,
+    quantity=quantity,
     product_type=dhanhq.INTRA,
     price=float(atm["ce_ltp"]),
 )
