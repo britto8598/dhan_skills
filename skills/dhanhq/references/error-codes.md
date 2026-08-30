@@ -136,6 +136,8 @@ Current documented rate limits:
 | Quote APIs | 1 | Unlimited | Unlimited | Unlimited |
 | Non-Trading APIs | 20 | Unlimited | Unlimited | Unlimited |
 
+Separately from the table, order modifications are capped at 25 per order.
+
 ## Practical Rule
 
 Never use the error code alone without endpoint context.

@@ -28,6 +28,7 @@ dhan_context = DhanContext("client_id", "access_token")
 instruments = [
     (MarketFeed.NSE, "2885", MarketFeed.Ticker),
     (MarketFeed.NSE, "1333", MarketFeed.Quote),
+    # Derivative IDs are per-contract and expire; resolve a live one.
     (MarketFeed.NSE_FNO, "49081", MarketFeed.Full),
 ]
 

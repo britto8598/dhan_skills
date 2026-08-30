@@ -45,6 +45,52 @@ if response["status"] == "success":
 
 Practical note:
 - current v2 API docs describe minute data for active instruments over up to last 5 years
+- but only 90 days can be polled per call, so any longer backtest window has to
+  be fetched in chunks and concatenated
+
+```python
+import pandas as pd
+
+
+def fetch_intraday_range(
+    dhan,
+    *,
+    security_id,
+    exchange_segment,
+    instrument_type,
+    start,
+    end,
+    interval=1,
+    chunk_days=90,
+):
+    """Fetch an intraday range longer than the 90-day per-call cap."""
+
+    frames = []
+    cursor = pd.Timestamp(start)
+    end_ts = pd.Timestamp(end)
+
+    while cursor < end_ts:
+        stop = min(cursor + pd.Timedelta(days=chunk_days), end_ts)
+        response = dhan.intraday_minute_data(
+            security_id=security_id,
+            exchange_segment=exchange_segment,
+            instrument_type=instrument_type,
+            from_date=cursor.strftime("%Y-%m-%d %H:%M:%S"),
+            to_date=stop.strftime("%Y-%m-%d %H:%M:%S"),
+            interval=interval,
+        )
+        if response["status"] == "success" and response["data"]:
+            frames.append(pd.DataFrame(response["data"]))
+        cursor = stop
+
+    if not frames:
+        return pd.DataFrame()
+
+    # Chunk boundaries are shared between consecutive calls, so drop any
+    # bar returned by both.
+    out = pd.concat(frames, ignore_index=True)
+    return out.drop_duplicates(subset="timestamp", ignore_index=True)
+```
 
 ## Expired Options Backtest Skeleton
 
