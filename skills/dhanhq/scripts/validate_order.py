@@ -11,16 +11,27 @@ from __future__ import annotations
 from datetime import datetime
 
 
-# These are fallback heuristics only. Prefer security-master-derived values.
+# Fallback heuristics only. The security master (SEM_LOT_UNITS) is authoritative and
+# is consulted first -- see _lot_size_from_master(). These literals exist so the
+# validator still runs when pandas or the master download is unavailable.
+#
+# Verified 2026-08-31 against Dhan's api-scrip-master.csv (SEM_LOT_UNITS, OPTIDX rows,
+# single distinct value per underlying). Exchanges revise these periodically; NIFTY
+# alone went 75 -> 65 between 2026-07-10 and 2026-08-31. Re-verify before trusting.
 LOT_SIZES = {
-    "NIFTY": 75,
-    "BANKNIFTY": 15,
-    "FINNIFTY": 25,
-    "MIDCPNIFTY": 50,
-    "SENSEX": 10,
+    "NIFTY": 65,
+    "BANKNIFTY": 30,
+    "FINNIFTY": 60,
+    "MIDCPNIFTY": 120,
+    "SENSEX": 20,
+    "SENSEX50": 75,
+    "BANKEX": 30,
 }
 
-# Fallback freeze-quantity heuristics only.
+# Fallback freeze-quantity heuristics only. UNVERIFIED -- these are the values that
+# shipped with the skill and the security master carries no freeze column, so they
+# have not been checked against the current exchange circulars. They drive a warning
+# only, never an error. Confirm against NSE/BSE freeze limits before relying on them.
 FREEZE_QTY = {
     "NIFTY": 1800,
     "BANKNIFTY": 900,
@@ -52,26 +63,70 @@ VALID_VALIDITY = {"DAY", "IOC"}
 NOTIONAL_WARNING_THRESHOLD = 50000
 
 
-def _infer_lot_size(trading_symbol: str | None) -> int | None:
+def _underlying_of(trading_symbol: str | None) -> str | None:
+    """Return the underlying token of a Dhan trading symbol.
+
+    Dhan derivative symbols are ``UNDERLYING-MonYYYY-STRIKE-CE`` (for example
+    ``BANKNIFTY-Oct2026-57000-CE``), so the underlying is the segment before the
+    first hyphen. Falls back to the whole string for symbols without one.
+    """
+
     if not trading_symbol:
         return None
+    return trading_symbol.upper().split("-", 1)[0].strip() or None
 
-    symbol_upper = trading_symbol.upper()
-    for name, lot_size in LOT_SIZES.items():
-        if name in symbol_upper:
-            return lot_size
+
+def _lookup(table: dict[str, int], trading_symbol: str | None) -> int | None:
+    """Match ``trading_symbol`` against ``table``.
+
+    Exact match on the underlying token first. Only if that fails do we fall back
+    to a substring scan, and that scan tries the LONGEST key first -- a plain
+    ``for name in table`` scan matches "NIFTY" inside "BANKNIFTY", "FINNIFTY" and
+    "MIDCPNIFTY", silently returning NIFTY's value for every index.
+    """
+
+    underlying = _underlying_of(trading_symbol)
+    if underlying is None:
+        return None
+
+    if underlying in table:
+        return table[underlying]
+
+    for name in sorted(table, key=len, reverse=True):
+        if name in underlying:
+            return table[name]
     return None
+
+
+def _lot_size_from_master(
+    security_id: str | None, trading_symbol: str | None
+) -> int | None:
+    """Authoritative lot size from the security master, or None if unavailable.
+
+    Kept optional on purpose: this module must stay importable without pandas or
+    network access, so any failure falls through to the LOT_SIZES heuristic.
+    """
+
+    try:
+        from dhan_helpers import get_lot_size
+    except Exception:
+        try:
+            from scripts.dhan_helpers import get_lot_size
+        except Exception:
+            return None
+
+    try:
+        return get_lot_size(security_id=security_id, trading_symbol=trading_symbol)
+    except Exception:
+        return None
+
+
+def _infer_lot_size(trading_symbol: str | None) -> int | None:
+    return _lookup(LOT_SIZES, trading_symbol)
 
 
 def _infer_freeze_qty(trading_symbol: str | None) -> int | None:
-    if not trading_symbol:
-        return None
-
-    symbol_upper = trading_symbol.upper()
-    for name, freeze_qty in FREEZE_QTY.items():
-        if name in symbol_upper:
-            return freeze_qty
-    return None
+    return _lookup(FREEZE_QTY, trading_symbol)
 
 
 def validate_order(
@@ -144,7 +199,11 @@ def validate_order(
             "Dhan's current order docs say API market orders are converted to limit orders with MPP."
         )
 
-    effective_lot_size = lot_size or _infer_lot_size(trading_symbol)
+    effective_lot_size = (
+        lot_size
+        or _lot_size_from_master(security_id, trading_symbol)
+        or _infer_lot_size(trading_symbol)
+    )
     if exchange_segment in DERIVATIVE_SEGMENTS and quantity:
         if effective_lot_size is not None and quantity % effective_lot_size != 0:
             errors.append(
