@@ -60,7 +60,11 @@ npx skills add britto8598/dhan_skills --skill orderflow-indicators
 # ...repeat for each skill you need
 ```
 
-Or copy folders straight into Claude Code's skill directory:
+**Claude Code on the web / opening this repo:** nothing to install. `.claude/skills/`
+holds symlinks to every folder in `skills/`, so any Claude Code session started in
+this repo loads all the skills automatically. Edit skills only under `skills/`.
+
+Or copy folders straight into Claude Code's skill directory (to use them in other projects):
 
 ```bash
 git clone -b claude/trading-odxcharts-terminal-b0wmgg https://github.com/britto8598/dhan_skills.git
