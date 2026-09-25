@@ -83,6 +83,23 @@ Then ask Claude Code, e.g. *"Using trading-terminal-blueprint, scaffold phase 1:
 Dhan + Kite feeds into normalized ticks and a NIFTY-I footprint aggregator."*
 
 ---
+
+## Browser Trading Terminal (`terminal/`)
+
+A Next.js + Tailwind order-flow terminal built with these skills: multi-chart grid
+(up to 8 tiles, 3 screens), candlestick / footprint / TPO engines, order flow
+matrix, delta indicators, options money flow, option chain, L2/L3/L4 DOM with a
+DOM-surface heatmap, power and high/low scanners, synthetic-future and straddle
+scalper overlays, a YouTube/stream panel, and a built-in mock market feed.
+
+```bash
+cd terminal && npm install && npm run dev   # http://localhost:3000
+```
+
+See [terminal/README.md](terminal/README.md) for features, the backend protocol
+for Dhan / Zerodha, and Docker / DigitalOcean deployment.
+
+---
 ## After Installation
 
 Once installed, your AI agent can automatically use the `dhanhq` skill when your prompt involves DhanHQ APIs, Indian market data, portfolio, orders, funds, or trading workflows.
