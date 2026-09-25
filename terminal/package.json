@@ -1,0 +1,37 @@
+{
+  "name": "odx-style-terminal",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Browser-based orderflow trading terminal (candles, footprint, TPO, DOM, options analytics) with a built-in mock market feed",
+  "scripts": {
+    "dev": "tsx watch --clear-screen=false --include ./src/lib/sim --include ./src/lib/feed/protocol.ts server/index.ts",
+    "dev:next": "next dev --webpack",
+    "build": "next build --webpack && tsc -p tsconfig.server.json",
+    "start": "NODE_ENV=production node dist-server/server/index.js",
+    "typecheck": "tsc --noEmit && tsc -p tsconfig.server.json --noEmit",
+    "lint": "tsc --noEmit",
+    "test": "tsx --test tests/*.test.ts"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "next": "^16.3.6",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "react-grid-layout": "^2.2.4",
+    "ws": "^8.21.3",
+    "zustand": "^5.0.15"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.3",
+    "@types/node": "^22.20.4",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@types/ws": "^8.18.1",
+    "postcss": "^8.5.28",
+    "tailwindcss": "^4.3.3",
+    "tsx": "^4.23.15",
+    "typescript": "^5.9.3"
+  }
+}

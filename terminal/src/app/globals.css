@@ -1,0 +1,172 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #07090d;
+  --color-panel: #0d1117;
+  --color-panel2: #121821;
+  --color-panel3: #18202b;
+  --color-line: #1e2632;
+  --color-line2: #2a3441;
+  --color-fg: #d6dde6;
+  --color-muted: #7d8898;
+  --color-dim: #525d6c;
+  --color-up: #22c55e;
+  --color-down: #ef4444;
+  --color-accent: #3b82f6;
+  --color-warn: #eab308;
+  --color-ch-red: #ef4444;
+  --color-ch-blue: #3b82f6;
+  --color-ch-yellow: #eab308;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+}
+
+html,
+body {
+  height: 100%;
+  background: var(--color-bg);
+  color: var(--color-fg);
+  font-size: 12px;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #2a3441 transparent;
+}
+*::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+*::-webkit-scrollbar-thumb {
+  background: #2a3441;
+  border-radius: 4px;
+}
+
+.num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- react-grid-layout: zero-gap tiles with slim resize handles ---------- */
+.react-grid-layout {
+  position: relative;
+  transition: height 120ms ease;
+}
+.react-grid-item {
+  transition: transform 120ms ease, width 120ms ease, height 120ms ease;
+  box-sizing: border-box;
+}
+.react-grid-item.react-draggable-dragging,
+.react-grid-item.resizing {
+  transition: none;
+  z-index: 30;
+  will-change: transform;
+}
+.react-grid-item.react-grid-placeholder {
+  background: rgba(59, 130, 246, 0.18);
+  border: 1px dashed #3b82f6;
+  transition-duration: 80ms;
+  z-index: 2;
+  user-select: none;
+}
+.react-grid-item > .react-resizable-handle {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  z-index: 20;
+}
+.react-grid-item > .react-resizable-handle-se {
+  right: 0;
+  bottom: 0;
+  cursor: se-resize;
+}
+.react-grid-item > .react-resizable-handle-se::after {
+  content: "";
+  position: absolute;
+  right: 3px;
+  bottom: 3px;
+  width: 6px;
+  height: 6px;
+  border-right: 2px solid #3b4758;
+  border-bottom: 2px solid #3b4758;
+}
+.react-grid-item > .react-resizable-handle-e,
+.react-grid-item > .react-resizable-handle-w {
+  top: 0;
+  width: 6px;
+  height: 100%;
+  cursor: ew-resize;
+}
+.react-grid-item > .react-resizable-handle-e {
+  right: -3px;
+}
+.react-grid-item > .react-resizable-handle-w {
+  left: -3px;
+}
+.react-grid-item > .react-resizable-handle-s,
+.react-grid-item > .react-resizable-handle-n {
+  left: 0;
+  height: 6px;
+  width: 100%;
+  cursor: ns-resize;
+}
+.react-grid-item > .react-resizable-handle-s {
+  bottom: -3px;
+}
+.react-grid-item > .react-resizable-handle-n {
+  top: -3px;
+}
+.react-grid-item > .react-resizable-handle-e:hover,
+.react-grid-item > .react-resizable-handle-w:hover,
+.react-grid-item > .react-resizable-handle-s:hover,
+.react-grid-item > .react-resizable-handle-n:hover {
+  background: rgba(59, 130, 246, 0.45);
+}
+
+.react-grid-item.dropping {
+  visibility: hidden;
+}
+.react-resizable-hide > .react-resizable-handle {
+  display: none;
+}
+
+/* ---------- ticker tape ---------- */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.marquee {
+  display: inline-flex;
+  animation: marquee var(--marquee-duration, 60s) linear infinite;
+  will-change: transform;
+}
+.marquee:hover {
+  animation-play-state: paused;
+}
+
+@keyframes flash-in {
+  from {
+    background: rgba(234, 179, 8, 0.35);
+  }
+  to {
+    background: transparent;
+  }
+}
+.flash {
+  animation: flash-in 1.2s ease-out;
+}
+
+select,
+input,
+button {
+  font: inherit;
+}
+select {
+  background: var(--color-panel2);
+  color: var(--color-fg);
+}
