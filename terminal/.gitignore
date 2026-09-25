@@ -1,6 +1,0 @@
-node_modules/
-.next/
-dist-server/
-next-env.d.ts
-*.tsbuildinfo
-.env*.local
