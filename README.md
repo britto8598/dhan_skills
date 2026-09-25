@@ -63,8 +63,16 @@ npx skills add britto8598/dhan_skills --skill orderflow-indicators
 Or copy folders straight into Claude Code's skill directory:
 
 ```bash
-cp -r skills/* ~/.claude/skills/          # all projects
-cp -r skills/* <your-project>/.claude/skills/   # one project
+git clone -b claude/trading-odxcharts-terminal-b0wmgg https://github.com/britto8598/dhan_skills.git
+cd dhan_skills
+mkdir -p ~/.claude/skills && cp -r skills/* ~/.claude/skills/     # macOS / Linux, all projects
+```
+
+Windows PowerShell:
+
+```powershell
+New-Item -ItemType Directory -Force "$env:USERPROFILE\.claude\skills" | Out-Null
+Copy-Item -Recurse -Force skills\* "$env:USERPROFILE\.claude\skills\"
 ```
 
 Then ask Claude Code, e.g. *"Using trading-terminal-blueprint, scaffold phase 1:
