@@ -34,6 +34,43 @@ npx @dhan-oss/dhanhq-skill
 ```
 
 ---
+
+## Trading Terminal Skills (Dhan + Zerodha)
+
+Extra skills in this repo for building a self-hosted, browser-based orderflow
+terminal (ODXCharts-style web terminal with Quantower-style indicators) for
+NIFTY / BANKNIFTY / SENSEX futures and options.
+
+| Skill | Purpose |
+|-------|---------|
+| [`trading-terminal-blueprint`](skills/trading-terminal-blueprint/SKILL.md) | Entry point: architecture, feature map, build phases, which skill to use |
+| [`dhanhq`](skills/dhanhq/SKILL.md) | Dhan orders, option chain, MarketFeed, 20/200-level depth |
+| [`zerodha-kite`](skills/zerodha-kite/SKILL.md) | Kite Connect login, instruments, orders, GTT, KiteTicker → asyncio |
+| [`orderflow-indicators`](skills/orderflow-indicators/SKILL.md) | Trade reconstruction from snapshots, footprint, volume profile, TPO, CVD, VWAP, big trades, heatmap (`scripts/orderflow_engine.py`) |
+| [`options-oi-greeks`](skills/options-oi-greeks/SKILL.md) | Greeks, IV, OI build-up, PCR, max pain, GEX, straddle, strike selection (`scripts/greeks.py`) |
+| [`trading-terminal-backend`](skills/trading-terminal-backend/SKILL.md) | FastAPI relay, broker adapters, tick store, WebSocket protocol, OMS, risk engine, paper broker, deployment |
+| [`browser-terminal-frontend`](skills/browser-terminal-frontend/SKILL.md) | React + lightweight-charts, canvas footprint/TPO/heatmap, DOM ladder, option chain, order ticket |
+| [`option-buying-ml`](skills/option-buying-ml/SKILL.md) | Setups → labelled events, leak-free features, triple-barrier labels, cost model, walk-forward LightGBM meta-labelling, journal feedback loop |
+
+Install one or more:
+
+```bash
+npx skills add britto8598/dhan_skills --skill trading-terminal-blueprint
+npx skills add britto8598/dhan_skills --skill orderflow-indicators
+# ...repeat for each skill you need
+```
+
+Or copy folders straight into Claude Code's skill directory:
+
+```bash
+cp -r skills/* ~/.claude/skills/          # all projects
+cp -r skills/* <your-project>/.claude/skills/   # one project
+```
+
+Then ask Claude Code, e.g. *"Using trading-terminal-blueprint, scaffold phase 1:
+Dhan + Kite feeds into normalized ticks and a NIFTY-I footprint aggregator."*
+
+---
 ## After Installation
 
 Once installed, your AI agent can automatically use the `dhanhq` skill when your prompt involves DhanHQ APIs, Indian market data, portfolio, orders, funds, or trading workflows.
